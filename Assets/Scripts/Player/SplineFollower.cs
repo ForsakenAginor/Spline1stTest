@@ -10,16 +10,18 @@ public class SplineFollower : MonoBehaviour
     private float _splineRate = 0f;
     private float _input = 0f;
     private float _lastMousePosition;
+    private PlayerInput _playerInput;
 
     private void Start()
     {
         _lastMousePosition = Input.mousePosition.x;
+        _playerInput = new PlayerInput();
     }
 
     private void Update()
     {
-        _input += (Input.mousePosition.x - _lastMousePosition) * _sensitivity;
-        _lastMousePosition = Input.mousePosition.x;
+        _input += (_playerInput.GetX() - _lastMousePosition) * _sensitivity;
+        _lastMousePosition = _playerInput.GetX();
         _input = Mathf.Clamp(_input, -1f, 1f);
 
         _splineRate += _speed * Time.deltaTime;

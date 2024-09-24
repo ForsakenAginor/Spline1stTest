@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +11,6 @@ public class WalletPopUpView : MonoBehaviour
     [SerializeField] private float _animationDuration;
     [SerializeField] private float _disappearDuration;
 
-    private Pickuper _pickuper;
     private int _buffer;
     private Vector3 _startPosition;
     private Vector3 _endPosition;
@@ -25,20 +23,13 @@ public class WalletPopUpView : MonoBehaviour
         _holder.gameObject.SetActive(false);
     }
 
-    private void OnDestroy()
+    public void Init(Vector3 targetPosition)
     {
-        _pickuper.PickUped -= OnPickUped;        
-    }
-
-    public void Init(Pickuper pickuper)
-    {
-        _pickuper = pickuper != null ? pickuper : throw new ArgumentNullException(nameof(pickuper));
         _startPosition = _holder.localPosition;
-        _endPosition = _startPosition + new Vector3(0, 0.5f, 0);
-        _pickuper.PickUped += OnPickUped;
+        _endPosition = _startPosition + targetPosition;
     }
 
-    private void OnPickUped(int value)
+    public void PlayAnimation(int value)
     {
         _holder.gameObject.SetActive(true);
         _movingTween?.Kill();
@@ -48,8 +39,9 @@ public class WalletPopUpView : MonoBehaviour
         BecameVisible(_icon);
         BecameVisible(_textField);
 
+        string symbol = value > 0 ? "+" : "";
         _buffer += value;
-        _textField.text = $"+{_buffer}";
+        _textField.text = $"{symbol}{_buffer}";
         _movingTween = _holder.DOLocalMove(_endPosition, _animationDuration).OnComplete(RestoreToDefault);
         _dissapearImageTween = _icon.DOFade(0, _disappearDuration);
         _dissapearTextTween = _textField.DOFade(0, _disappearDuration);

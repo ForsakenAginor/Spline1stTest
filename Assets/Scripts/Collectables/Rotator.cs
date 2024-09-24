@@ -8,7 +8,7 @@ public class Rotator : MonoBehaviour
     private void Start()
     {
         int infinity = -1;
-        Vector3 target = new (0, 180, 0);
+        Vector3 target = new Vector3(0, 180, 0);
 
         transform.DOLocalRotate(target, _rotationSpeed)
             .SetLoops(infinity, LoopType.Incremental)
